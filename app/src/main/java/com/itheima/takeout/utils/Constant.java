@@ -29,4 +29,8 @@ public interface Constant {
     String LAT ="Lat";
     String LNG ="Lng";
 
+    // 登录状态
+    String ISLOGIN = "isLogin";
+    String USERNAME ="userName";
+
 }

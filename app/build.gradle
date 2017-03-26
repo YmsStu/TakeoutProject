@@ -34,6 +34,7 @@ android {
     repositories {
         flatDir {
             dirs 'libs' //就是你放aar的目录地址
+            dirs 'libs/SMSSDK' //这是 SMSSDK
         }
     }
 
@@ -78,5 +79,9 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     // 分组显示数据的三方控件
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
-
+    // MOB短信验证
+    compile name:'SMSSDK-2.1.3',ext:'aar'
+    compile name:'SMSSDKGUI-2.1.3',ext:'aar'
+    compile files('libs/SMSSDK/MobCommons-2016.1201.1839.jar')
+    compile files('libs/SMSSDK/MobTools-2016.1201.1839.jar')
 }
