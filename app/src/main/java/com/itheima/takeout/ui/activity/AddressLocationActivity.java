@@ -109,7 +109,8 @@ public class AddressLocationActivity extends BaseActivity implements LocationSou
     public void activate(OnLocationChangedListener listener) {
         mListener = listener;
         if (mlocationClient == null) {
-            mlocationClient = new AMapLocationClient(this);
+            //此处做了修改3.27
+            mlocationClient = new AMapLocationClient(getApplicationContext());
             mLocationOption = new AMapLocationClientOption();
             //设置定位监听
             mlocationClient.setLocationListener(this);
