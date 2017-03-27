@@ -11,12 +11,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.itheima.takeout.MyApplication;
 import com.itheima.takeout.R;
 import com.itheima.takeout.dagger.conponent.fragment.DaggerHomeFragmentConponent;
 import com.itheima.takeout.dagger.conponent.fragment.HomeFragmentConponent;
 import com.itheima.takeout.dagger.module.fragment.HomeFragmentModule;
 import com.itheima.takeout.model.net.bean.HomeInfo;
 import com.itheima.takeout.presenter.fragment.HomeFragmentPresenter;
+import com.itheima.takeout.ui.adapter.Bean;
+import com.itheima.takeout.ui.adapter.RecycleAdapter;
+import com.itheima.takeout.ui.views.RecycleViewDivider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -75,8 +82,33 @@ public class HomeFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvHome.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
+        //设置adapter
+        rvHome.setAdapter(new RecycleAdapter(MyApplication.getContext(),initData()));
+        //设置分割线
+        rvHome.addItemDecoration(new RecycleViewDivider(MyApplication.getContext(),LinearLayoutManager.HORIZONTAL));
         rvHome.addOnScrollListener(listener);
 
+    }
+
+    private List<Bean> initData() {
+
+        List<Bean> mData = new ArrayList<>();
+        for (int i = 'A'; i < 'Z'; i++) {
+
+            Bean bean = new Bean();
+            bean.setText((char) i + "");
+            int type = i % 3;
+            if (type == 0) {
+                bean.setType(0);
+            } else if (type == 1) {
+                bean.setType(1);
+            } else if (type == 2) {
+                bean.setType(2);
+            }
+
+            mData.add(bean);
+        }
+        return mData;
     }
 
 
