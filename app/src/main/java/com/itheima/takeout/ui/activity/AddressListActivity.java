@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.itheima.takeout.R;
@@ -27,8 +28,8 @@ public class AddressListActivity extends BaseActivity {
     TextView tvTitle;
     @InjectView(R.id.rv_receipt_address)
     RecyclerView rvReceiptAddress;
-    @InjectView(R.id.tv_add_address)
-    TextView tvAddAddress;
+    @InjectView(R.id.ll_add_address)
+    LinearLayout llAddAddress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,13 +38,13 @@ public class AddressListActivity extends BaseActivity {
         ButterKnife.inject(this);
     }
 
-    @OnClick({R.id.ib_back, R.id.tv_add_address})
+    @OnClick({R.id.ib_back,R.id.ll_add_address})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_back:
                 finish();
                 break;
-            case R.id.tv_add_address:
+            case R.id.ll_add_address:
                 addAddress();
                 break;
         }
@@ -53,6 +54,7 @@ public class AddressListActivity extends BaseActivity {
         Intent intentAdd = new Intent(this, AddAddressActivity.class);
         startActivity(intentAdd);
     }
+
 
 
 }
