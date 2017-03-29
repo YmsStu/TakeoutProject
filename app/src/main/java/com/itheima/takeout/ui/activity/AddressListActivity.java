@@ -31,11 +31,16 @@ public class AddressListActivity extends BaseActivity {
     @InjectView(R.id.ll_add_address)
     LinearLayout llAddAddress;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt_address);
         ButterKnife.inject(this);
+
+
+
     }
 
     @OnClick({R.id.ib_back,R.id.ll_add_address})
@@ -54,7 +59,6 @@ public class AddressListActivity extends BaseActivity {
         Intent intentAdd = new Intent(this, AddAddressActivity.class);
         startActivity(intentAdd);
     }
-
 
 
 }

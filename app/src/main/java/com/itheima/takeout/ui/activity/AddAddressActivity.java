@@ -18,8 +18,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.itheima.takeout.R;
 import com.itheima.takeout.utils.SMSUtil;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -68,6 +70,7 @@ public class AddAddressActivity extends BaseActivity {
     private int[] bgLabels;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +78,15 @@ public class AddAddressActivity extends BaseActivity {
         ButterKnife.inject(this);
 
         //标签要用到的数组
-        addressLabels = new String[]{ "家", "公司", "学校"};
+        addressLabels = new String[]{ "家", "公司", "学校","其他"};
         //家  橙色
         //公司 蓝色
         //学校   绿色
         bgLabels = new int[]{
                 Color.parseColor("#fc7251"),//家  橙色
                 Color.parseColor("#468ade"),//公司 蓝色
-                Color.parseColor("#02c14b"),//学校   绿色
+                Color.parseColor("#02c14b"),//学校 绿色
+                Color.parseColor("#468ade"),//其他 蓝色
         };
 
         //给edtiText注册事件监听,让其文本变化的时候,显示x图片
@@ -154,14 +158,24 @@ public class AddAddressActivity extends BaseActivity {
                 break;
             case R.id.bt_ok:
                 //检查数据是否合法
-                checkData();
+                if(checkData()){
+
+finish();
+
+                }
                 break;
         }
     }
 
+
+
     private void reAddress() {
-        Intent intent = new Intent(this, AddressLocationActivity.class);
+      /*  Intent intent = new Intent(this, AddressLocationActivity.class);
+        startActivityForResult(intent,100);*/
+
+        Intent intent = new Intent(this, Map2Activity.class);
         startActivityForResult(intent,100);
+
     }
 
     private void showLableDialog() {
@@ -196,11 +210,11 @@ public class AddAddressActivity extends BaseActivity {
             Toast.makeText(this, "请填写合法的手机号", Toast.LENGTH_SHORT).show();
             return false;
         }
-//        String receiptAddress = tvReceiptAddress.getText().toString().trim();
-//        if (TextUtils.isEmpty(receiptAddress)) {
-//            Toast.makeText(this, "请选择收货地址", Toast.LENGTH_SHORT).show();
-//            return false;
-//        }
+/*        String receiptAddress = tvReceiptAddress.getText().toString().trim();
+        if (TextUtils.isEmpty(receiptAddress)) {
+            Toast.makeText(this, "请选择收货地址", Toast.LENGTH_SHORT).show();
+            return false;
+        }*/
         String address = etDetailAddress.getText().toString().trim();
         if (TextUtils.isEmpty(address)) {
             Toast.makeText(this, "请填写详细地址", Toast.LENGTH_SHORT).show();

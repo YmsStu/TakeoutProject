@@ -1,6 +1,7 @@
 package com.itheima.takeout.ui.fragment;
 
 import android.animation.ArgbEvaluator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.itheima.takeout.dagger.conponent.fragment.HomeFragmentConponent;
 import com.itheima.takeout.dagger.module.fragment.HomeFragmentModule;
 import com.itheima.takeout.model.net.bean.HomeInfo;
 import com.itheima.takeout.presenter.fragment.HomeFragmentPresenter;
+import com.itheima.takeout.ui.activity.Map2Activity;
 import com.itheima.takeout.ui.adapter.Bean;
 import com.itheima.takeout.ui.adapter.RecycleAdapter;
 import com.itheima.takeout.ui.views.RecycleViewDivider;
@@ -166,7 +168,20 @@ public class HomeFragment extends BaseFragment {
 
 
     @OnClick(R.id.home_tv_address)
-    public void onClick() {
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            case R.id.home_tv_address:
+
+                Intent intent = new Intent(getContext(), Map2Activity.class);
+                startActivity(intent);
+
+                break;
+
+
+
+
+        }
 
     }
 

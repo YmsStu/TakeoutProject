@@ -29,13 +29,6 @@ public abstract class BasePresenter {
 
     public BasePresenter() {
 
-/*        Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl(Constant.BASEURL);
-        builder.addConverterFactory(GsonConverterFactory.create());// Gson解析
-
-        Retrofit retrofit = builder.build();*/
-
-
         // 第一次初始化完成后，所有子类都可以使用
         if(responseInfoAPI==null) {
             Retrofit retrofit = new Retrofit.Builder()
