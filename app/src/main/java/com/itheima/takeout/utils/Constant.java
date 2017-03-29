@@ -9,8 +9,9 @@ public interface Constant {
     String replace_img_url = "192.168.82.250";
     // http://localhost:8080/   TakeoutService    /login?username="itheima"&password="bj"
 
+ String BASEURL="http://10.0.2.2:8080/";
    //String BASEURL="http://192.168.82.42:8080/";
-   String BASEURL="http://192.168.82.250:8080/";
+   //String BASEURL="http://192.168.82.250:8080/";
     // 登陆
     String LOGIN="TakeoutService/login";
     // http://localhost:8080/TakeoutService/home
