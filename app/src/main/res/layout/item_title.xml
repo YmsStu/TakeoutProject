@@ -8,6 +8,9 @@
 
     <com.daimajia.slider.library.SliderLayout
         android:id="@+id/slider"
+        auto_cycle="true"
+        indicator_visibility="visible"
+        pager_animation_span="1100"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
@@ -50,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/darker_gray"
-            android:text="附近商家" />
+            android:text="附近商家"
+            android:textColor="@android:color/darker_gray" />
     </LinearLayout>
 
 </LinearLayout>

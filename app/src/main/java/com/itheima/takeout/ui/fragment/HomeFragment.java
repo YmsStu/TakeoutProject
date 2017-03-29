@@ -24,9 +24,6 @@ import com.itheima.takeout.ui.adapter.Bean;
 import com.itheima.takeout.ui.adapter.RecycleAdapter;
 import com.itheima.takeout.ui.views.RecycleViewDivider;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -59,7 +56,7 @@ public class HomeFragment extends BaseFragment {
 
     @Inject
     HomeFragmentPresenter presenter;
-
+    private HomeInfo mDatainfo;
 
 
     @Override
@@ -83,44 +80,16 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvHome.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
-        //设置adapter
-        rvHome.setAdapter(new RecycleAdapter(MyApplication.getContext(),initData()));
-        //设置分割线
-        rvHome.addItemDecoration(new RecycleViewDivider(MyApplication.getContext(),LinearLayoutManager.HORIZONTAL));
-        rvHome.addOnScrollListener(listener);
+        presenter.getData();
 
     }
-
-    private List<Bean> initData() {
-
-        List<Bean> mData = new ArrayList<>();
-        for (int i = 'A'; i < 'Z'; i++) {
-
-            Bean bean = new Bean();
-            bean.setText((char) i + "");
-            int type = i % 3;
-            if (type == 0) {
-                bean.setType(0);
-            } else if (type == 1) {
-                bean.setType(1);
-            } else if (type == 2) {
-                bean.setType(2);
-            }
-
-            mData.add(bean);
-        }
-        return mData;
-    }
-
 
 
     @Override
     public void onResume() {
         super.onResume();
 
-        presenter.getData();
-        // 显示滚动条
+
     }
 
     private int sumY = 0;
@@ -162,9 +131,17 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void success(HomeInfo info) {
+        mDatainfo = info;
+
+        rvHome.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
+        //设置adapter
+        rvHome.setAdapter(new RecycleAdapter(MyApplication.getContext(), mDatainfo));
+        //设置分割线
+        rvHome.addItemDecoration(new RecycleViewDivider(MyApplication.getContext(), LinearLayoutManager.HORIZONTAL));
+        rvHome.addOnScrollListener(listener);
+        // 显示滚动条
 
     }
-
 
 
     @OnClick(R.id.home_tv_address)
@@ -184,7 +161,6 @@ public class HomeFragment extends BaseFragment {
         }
 
     }
-
 
 
 }
