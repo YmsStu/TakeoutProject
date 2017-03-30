@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itheima.takeout.R;
+import com.itheima.takeout.ui.activity.AddressListActivity;
 import com.itheima.takeout.ui.activity.LoginActivity;
 import com.itheima.takeout.ui.activity.SettleCenterActivity;
 import com.itheima.takeout.utils.Constant;
@@ -91,8 +92,10 @@ public class UserFragment extends Fragment {
     }
 
     private void clickAddress() {
-        Toast.makeText(getContext(), "点击了地址", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "点击了地址", Toast.LENGTH_SHORT).show();
         //TODO 点击地址的操作
+        Intent intent = new Intent(getContext(), AddressListActivity.class);
+        startActivity(intent);
     }
 
     /**

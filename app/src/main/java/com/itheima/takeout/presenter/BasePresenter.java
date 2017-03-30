@@ -1,7 +1,9 @@
 package com.itheima.takeout.presenter;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.itheima.takeout.MyApplication;
 import com.itheima.takeout.model.dao.DBHelper;
 import com.itheima.takeout.model.net.bean.ResponseInfo;
 import com.itheima.takeout.presenter.api.ResponseInfoAPI;
@@ -26,13 +28,6 @@ public abstract class BasePresenter {
 
 
     public BasePresenter() {
-
-/*        Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl(Constant.BASEURL);
-        builder.addConverterFactory(GsonConverterFactory.create());// Gson解析
-
-        Retrofit retrofit = builder.build();*/
-
 
         // 第一次初始化完成后，所有子类都可以使用
         if(responseInfoAPI==null) {
@@ -75,6 +70,9 @@ public abstract class BasePresenter {
         public void onFailure(Call<ResponseInfo> call, Throwable t) {
             // 联网过程中的异常
             Log.d("tag", t.getMessage().toString());
+            // 没网吐司一下
+            Toast.makeText(MyApplication.getContext(), t.getMessage().toString(), Toast.LENGTH_SHORT).show();
+
         }
     }
 

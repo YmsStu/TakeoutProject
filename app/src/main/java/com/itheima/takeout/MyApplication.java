@@ -11,7 +11,10 @@ import cn.smssdk.SMSSDK;
  */
 
 public class MyApplication extends Application {
+
     private static Context context;
+
+    public static int USERID=9527;
 
     public static Context getContext() {
         return context;

@@ -1,6 +1,7 @@
 package com.itheima.takeout.model.net.bean;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**

@@ -156,7 +156,6 @@ public class LoginActivity extends Activity {
             Toast.makeText(this, "登录信息不完整,请检查!", Toast.LENGTH_SHORT).show();
         } else {
             mLogin.setEnabled(true);
-            //TODO 登录
             Log.d("TAG","提交了验证码");
             SMSSDK.submitVerificationCode("86",phone,code);//提交短信验证码，在监听中返回
         }
