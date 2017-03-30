@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="#fff"
               android:orientation="vertical"
+              android:id="@+id/ll_linnear"
     >
 
     <LinearLayout
@@ -125,7 +127,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <TextView
                     android:id="@+id/tv_receipt_connect_info"
@@ -213,12 +216,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <!--一组从服务器获取到的支付方式-->
-                <!--<View
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#fd9b9999" />
 
-                <include layout="@layout/item_online_pay" />-->
+                <include layout="@layout/item_online_pay" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fd9b9999" />
+
+                <include layout="@layout/item_online_pay_wechat" />
             </LinearLayout>
 
         </LinearLayout>
@@ -230,5 +240,7 @@
         android:layout_height="50dp"
         android:background="#22c222"
         android:text="确认支付"
-        android:textColor="#fff" />
+        android:textColor="#fff"
+        android:enabled="false"
+        />
 </LinearLayout>

@@ -31,14 +31,15 @@
    <ScrollView
        android:layout_width="match_parent"
        android:layout_weight="1"
-       android:layout_height="0dp">
+       android:layout_height="wrap_content">
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:orientation="vertical">
            <RelativeLayout
                android:id="@+id/rl_location"
-               android:layout_width="match_parent" android:layout_height="80dp"
+               android:layout_width="match_parent"
+               android:layout_height="80dp"
                android:background="#fff">
 
                <ImageView
@@ -75,7 +76,8 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="center_vertical"
                        android:orientation="vertical"
-                       android:visibility="invisible">
+                       android:visibility="invisible"
+                       >
 
                        <LinearLayout
                            android:layout_width="match_parent"
@@ -293,10 +295,14 @@
                android:background="#FCFCFC"/>
            <LinearLayout
                android:id="@+id/ll_select_goods"
+               android:orientation="vertical"
                android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="vertical">
-
+               android:layout_height="wrap_content">
+           <android.support.v7.widget.RecyclerView
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:id="@+id/goods_recyclerView"
+               ></android.support.v7.widget.RecyclerView>
            </LinearLayout>
 
            <View
@@ -323,7 +329,7 @@
                    android:layout_marginRight="20dp"
                    android:textColor="#9B9B9B"
                    android:layout_alignParentRight="true"
-                   android:text="￥4"
+                   android:text="￥0"
                    android:textSize="12sp"/>
 
            </RelativeLayout>
