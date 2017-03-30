@@ -56,10 +56,6 @@ public class SettleCenterActivity extends AppCompatActivity {
     ImageView ivLogo;
     @InjectView(R.id.tv_seller_name)
     TextView tvSellerName;
-    @InjectView(R.id.tv_goodsName)
-    TextView tvGoodsName;
-    @InjectView(R.id.goodsPrice)
-    TextView goodsPrice;
     @InjectView(R.id.ll_select_goods)
     RelativeLayout llSelectGoods;
     @InjectView(R.id.tv_send_price)
