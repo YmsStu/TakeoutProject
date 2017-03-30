@@ -40,6 +40,11 @@
         <activity android:name=".ui.activity.LoginActivity"
             android:windowSoftInputMode="stateHidden"
             />
+        <activity android:name=".ui.activity.SettleCenterActivity"></activity>
+        <activity android:name=".ui.activity.OnlinePayActivity"></activity>
+
+
+
 
     </application>
 

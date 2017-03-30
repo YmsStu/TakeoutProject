@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.itheima.takeout.R;
 import com.itheima.takeout.ui.activity.LoginActivity;
+import com.itheima.takeout.ui.activity.SettleCenterActivity;
 import com.itheima.takeout.utils.Constant;
 
 import butterknife.ButterKnife;
