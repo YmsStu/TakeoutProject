@@ -5,7 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "t_address")
 public class AddressBean {
-    @DatabaseField(generatedId = true)
+    @DatabaseField()
     public int _id;
 
     @DatabaseField(canBeNull = false)
@@ -20,12 +20,34 @@ public class AddressBean {
     public String detailAddress;
     @DatabaseField(canBeNull = false)
     public String label;
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     public long timeStamp;
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     public double longitude;
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     public double latitude;
+
+
+
+    @DatabaseField(canBeNull = false,foreign = true,foreignColumnName = "_id",columnName = "user_id")
+    public UserBean user;
+
+
+    public AddressBean() {
+    }
+
+    public AddressBean(String name, String sex, String phone, String receiptAddress, String detailAddress, String label, double longitude, double latitude) {
+        this.name = name;
+        this.sex = sex;
+        this.phone = phone;
+        this.receiptAddress = receiptAddress;
+        this.detailAddress = detailAddress;
+        this.label = label;
+        this.longitude=longitude;
+        this.latitude=latitude;
+
+        timeStamp=System.currentTimeMillis();
+    }
 
     public int get_id() {
         return _id;
@@ -113,25 +135,5 @@ public class AddressBean {
 
     public void setUser(UserBean user) {
         this.user = user;
-    }
-
-    @DatabaseField(canBeNull = false,foreign = true,foreignColumnName = "_id",columnName = "user_id")
-    public UserBean user;
-
-
-    public AddressBean() {
-    }
-
-    public AddressBean(String name, String sex, String phone, String receiptAddress, String detailAddress, String label, double longitude, double latitude) {
-        this.name = name;
-        this.sex = sex;
-        this.phone = phone;
-        this.receiptAddress = receiptAddress;
-        this.detailAddress = detailAddress;
-        this.label = label;
-        this.longitude=longitude;
-        this.latitude=latitude;
-
-        timeStamp=System.currentTimeMillis();
     }
 }

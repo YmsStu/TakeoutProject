@@ -15,9 +15,7 @@ android {
 
         resConfigs "zh"// 删除无用的语言包
 
-
-
-
+        
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

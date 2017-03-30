@@ -2,10 +2,11 @@ package com.itheima.takeout.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -18,41 +19,46 @@ import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.core.PoiItem;
-import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.itheima.takeout.R;
 import com.itheima.takeout.model.dao.bean.AddressBean;
+import com.itheima.takeout.ui.adapter.MapAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
-;
+public class Map2Activity extends AppCompatActivity implements AMapLocationListener, LocationSource{
 
-public class Map2Activity extends AppCompatActivity implements AMapLocationListener, LocationSource, PoiSearch.OnPoiSearchListener {
-
-    ;
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
     @InjectView(R.id.map)
     MapView mMapView;
+    @InjectView(R.id.rv)
+    RecyclerView mRv;
 
     public AMap aMap;
 
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
-
+    @InjectView(R.id.back)
+    ImageButton mBack;
     private boolean isFirstLoc;
 
-    //private MapAdapter mAdapter;
+    private MapAdapter mAdapter;
     private PoiSearch mPoiSearch;
     private double mLatitude;
     private double mLongitude;
     private LatLng latLng;
     private String city;
+    private List<String> lists;
+    private ArrayList<String> mLists;
+
 
     //private ArrayList<PoiItem> mPoiItems;
     private PoiSearch.Query mQuery;
@@ -60,7 +66,6 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
     private String name;
     private AMapLocation mAmapLocation = null;
 
-    private ImageButton ibBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,21 +74,6 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
         ButterKnife.inject(this);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView.onCreate(savedInstanceState);
-
-
-        ibBack = (ImageButton) findViewById(R.id.ib_back);
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
-
-
-
-
         //初始化地图控制器对象
 
         if (aMap == null) {
@@ -97,25 +87,17 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
         init();
         aMap.setLocationSource(this);
         aMap.setMyLocationEnabled(true);
-        initSearch();
+        //initSearch();
 
-        //initData();
-        //initRecyclerView();
+        initData();
+        initRecyclerView();
         //initOnclick();
     }
 
-
-
-    /*private void initAmap() {
-        // 设置定位监听
-        aMap.setLocationSource(this);
-// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        aMap.setMyLocationEnabled(true);
-// 设置定位的类型为定位模式，有定位、跟随或地图根据面向方向旋转几种
-        aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
-
-    }*/
-
+    @OnClick(R.id.back)
+    public void onClick() {
+        finish();
+    }
 
     OnLocationChangedListener mListener;
     AMapLocationClient mlocationClient;
@@ -154,24 +136,24 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
     }
 
     private void init() {
+
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
-//设置定位回调监听
+        //设置定位回调监听
         mLocationClient.setLocationListener(this);
 
-
-//初始化AMapLocationClientOption对象
+        //初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
 
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 
         //获取一次定位结果：
-//该方法默认为false。
+        //该方法默认为false。
         mLocationOption.setOnceLocation(true);
 
-//获取最近3s内精度最高的一次定位结果：
-//设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        //获取最近3s内精度最高的一次定位结果：
+        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
         mLocationOption.setOnceLocationLatest(true);
 
         //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
@@ -196,7 +178,6 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
 
-
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
@@ -215,12 +196,12 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
                 amapLocation.getStreetNum();//街道门牌号信息
                 amapLocation.getCityCode();//城市编码
                 amapLocation.getAdCode();//地区编码
-                Toast.makeText(Map2Activity.this, "定位成功", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Map2Activity.this, "定位成功", Toast.LENGTH_SHORT).show();
 
 
                 if (mAmapLocation == null) {
                     mAmapLocation = amapLocation;
-                    initSearch();
+                    //initSearch();
                 }
 
 
@@ -229,13 +210,12 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
                             && amapLocation.getErrorCode() == 0) {
                         mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
 
-
                         //添加图钉
                         aMap.addMarker(getMarkerOptions(amapLocation));
 
                     } else {
                         String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
-                        Log.e("AmapErr", errText);
+                        //Log.e("AmapErr", errText);
                     }
                 }
             }
@@ -248,14 +228,11 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
                     + amapLocation.getErrorInfo());
         }
 
-
     }
 
-    /**
+  /*  *//**
      * 搜索周边
      *//*
-
-    */
     private void initSearch() {
         if (mAmapLocation == null) {
             return;
@@ -279,7 +256,7 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
 
         // 设置搜索区域为以lp点为圆心，其周围2000米范围
 
-        mPoiSearch.setBound(new PoiSearch.SearchBound(new LatLonPoint(mAmapLocation.getLongitude(), mAmapLocation.getLatitude()), 1000));
+        mPoiSearch.setBound(new PoiSearch.SearchBound(new LatLonPoint(mAmapLocation.getLongitude(), mAmapLocation.getLatitude()), 2000));
         //mPoiSearch.setBound(new PoiSearch.SearchBound(new LatLonPoint(116.365828,40.100519),1000));
         mPoiSearch.searchPOIAsyn();
     }
@@ -301,67 +278,13 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
                     addressBean.receiptAddress = item.getSnippet();
                     addressList.add(addressBean);
                 }
-/*                mAdapter.setAddressList(addressList);
-                mAdapter.notifyDataSetChanged();*/
-
+                mAdapter.setAddressList(addressList);
+                mAdapter.notifyDataSetChanged();
             }
-
 
         }
     }
 
-
-    @Override
-    public void onPoiItemSearched(PoiItem poiItem, int i) {
-
-    }
-
-    /*private void doSearchQuery() {
-        System.out.println("doQuery");
-        aMap.setOnMapClickListener(null);// 进行poi搜索时清除掉地图点击事件
-        int currentPage = 0;
-        // 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
-        query = new PoiSearch.Query("", "餐饮", "010");
-        query.setPageSize(20);// 设置每页最多返回多少条poiitem
-        query.setPageNum(currentPage);// 设置查第一页
-
-        LatLonPoint lp = new LatLonPoint(latLng.latitude, latLng.longitude);
-
-        mPoiSearch = new PoiSearch(this, query);
-
-        mPoiSearch.setBound(new PoiSearch.SearchBound(lp, 2000));
-        // 设置搜索区域为以lp点为圆心，其周围2000米范围
-        mPoiSearch.searchPOIAsyn();// 异步搜索
-        mPoiSearch.setOnPoiSearchListener(this);
-    }*/
-
-
-   /* @Override
-    public void onPoiSearched(PoiResult result, int rCode) {
-        System.out.println(rCode + "rcode");
-//        if (rCode == 1000) {
-        mPoiItems = result.getPois();// 取得第一页的poiitem数据，页数从数字0开始
-        System.out.println(mPoiItems.toString() + "----");
-        List<SuggestionCity> suggestionCities = poiResult
-                .getSearchSuggestionCitys();
-        if (mPoiItems != null && mPoiItems.size() > 0) {
-            //adapter = new PoiSearch_adapter(this, poiItems);
-            MapAdapter adapter = new MapAdapter(this, mPoiItems);
-            mRv.setAdapter(adapter);
-            mRv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
-        }*/
-//        } else {
-//            Log.d("Map2Activity", "无结果");
-//        }
-
-
-   /* }
 
     @Override
     public void onPoiItemSearched(PoiItem poiItem, int i) {
@@ -373,16 +296,14 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
     private MarkerOptions getMarkerOptions(AMapLocation amapLocation) {
         //设置图钉选项
         MarkerOptions options = new MarkerOptions();
-
         //图标
-        options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.order_seller_icon));
+        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.location_marker));
         //位置
         options.position(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
         StringBuffer buffer = new StringBuffer();
         buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
         //标题
         options.title(buffer.toString());
-        //子标题
         //设置多少帧刷新一次图片资源
         options.period(60);
 
@@ -390,26 +311,23 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
 
     }
 
-/*private void initData() {
+    private void initData() {
+        lists = new ArrayList<>();
         mLists = new ArrayList<>();
-        mAddress = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            mLists.add("金百万"+i);
-            mAddress.add("昌平区北七家宏福苑小区温都水城");
+            lists.add("宏福科技园");
+            mLists.add("北京市昌平区北七家镇");
         }
-    }*/
+    }
 
 
-/*
     private void initRecyclerView() {
-        mRv.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new MapAdapter(this, addressList);
 
+        mRv.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new MapAdapter(this,lists,mLists);
         mRv.setAdapter(mAdapter);
 
-
     }
-*/
 
 
     @Override
@@ -443,6 +361,5 @@ public class Map2Activity extends AppCompatActivity implements AMapLocationListe
         //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
         mMapView.onSaveInstanceState(outState);
     }
-
 
 }

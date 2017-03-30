@@ -25,7 +25,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     //创建一个hashmap存储多个Dao对象
     private HashMap<String,Dao> hashMap = new HashMap<>();
 
-
+    private static DBHelper dbHelper = null;
 
 
     private DBHelper(Context context) {
@@ -47,6 +47,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             synchronized (DBHelper.class) {
                 if (instance == null) {// 第二次校验：防止对象的多次创建
                     instance = new DBHelper(MyApplication.getContext());
+                    //instance = new DBHelper(ctx);
                     instance.getWritableDatabase();
                 }
             }
@@ -63,7 +64,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTable(connectionSource, UserBean.class);
             TableUtils.createTable(connectionSource, AddressBean.class);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,5 +73,32 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
 
     }
+/*
+    //获取操作UserInfo表的dao对象,多个,项目中有多张表,每一个dao对象对应一张表进行操作
+    public Dao getDao(Class clazz){
+        Dao dao = null;
+        String clazzName = clazz.getSimpleName();
+        dao = hashMap.get(clazzName);
+        if (dao==null){
+            //获取clazz对应表的dao操作对象
+            try {
+                dao = super.getDao(clazz);
+                hashMap.put(clazzName,dao);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return dao;
+    }
+    //销毁所有dao
+    @Override
+    public void close() {
+        //遍历hashMap清空dao对象
+        for (String key: hashMap.keySet()) {
+            Dao dao = hashMap.get(key);
+            dao = null;
+        }
+        super.close();
+    }*/
 
 }

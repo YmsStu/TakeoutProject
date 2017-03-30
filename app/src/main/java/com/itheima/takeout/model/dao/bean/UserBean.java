@@ -1,14 +1,16 @@
 package com.itheima.takeout.model.dao.bean;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "t_user")
 public class UserBean {
     @DatabaseField(id = true)
     public int _id;
-//    @ForeignCollectionField(eager = true)
-//    private ForeignCollection<AddressBean> addressList;
+    @ForeignCollectionField(eager = true)
+    private ForeignCollection<AddressBean> addressList;
     @DatabaseField()
     public String name;
     @DatabaseField()
@@ -21,7 +23,6 @@ public class UserBean {
     public String phone;
     @DatabaseField
     public boolean login;
-
 
 
     public int get_id() {
@@ -83,11 +84,11 @@ public class UserBean {
     public void setLogin(boolean login) {
         this.login = login;
     }
-    //    public ForeignCollection<AddressBean> getAddressList() {
-//        return addressList;
-//    }
-//
-//    public void setAddressList(ForeignCollection<AddressBean> addressList) {
-//        this.addressList = addressList;
-//    }
+        public ForeignCollection<AddressBean> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(ForeignCollection<AddressBean> addressList) {
+        this.addressList = addressList;
+    }
 }
