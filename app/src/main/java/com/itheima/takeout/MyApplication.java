@@ -14,7 +14,7 @@ public class MyApplication extends Application {
 
     private static Context context;
 
-    public static int USERID=9527;
+    public static int userId = -1;
 
     public static Context getContext() {
         return context;

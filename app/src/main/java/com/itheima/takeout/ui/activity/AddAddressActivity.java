@@ -20,17 +20,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itheima.takeout.R;
+import com.itheima.takeout.model.dao.DBHelper;
+import com.itheima.takeout.model.dao.bean.AddressBean;
+import com.itheima.takeout.model.dao.bean.UserBean;
 import com.itheima.takeout.utils.SMSUtil;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static com.itheima.takeout.R.id.tv_receipt_address;
+
 /**
  * Created by zzh on 2017/3/27.
  */
 
-public class AddAddressActivity extends BaseActivity {
+public class AddAddressActivity extends BaseActivity implements View.OnClickListener{
 
     @InjectView(R.id.ib_back)
     ImageButton ibBack;
@@ -52,7 +60,7 @@ public class AddAddressActivity extends BaseActivity {
     EditText etPhone;
     @InjectView(R.id.ib_delete_phone)
     ImageButton ibDeletePhone;
-    @InjectView(R.id.tv_receipt_address)
+    @InjectView(tv_receipt_address)
     TextView tvReceiptAddress;
     @InjectView(R.id.et_detail_address)
     EditText etDetailAddress;
@@ -63,19 +71,29 @@ public class AddAddressActivity extends BaseActivity {
     @InjectView(R.id.bt_ok)
     Button btOk;
 
-
-
     //标签要用到的数组
     private String[] addressLabels;
     private int[] bgLabels;
-
-
+    private AddressBean receiptAddressBean = new AddressBean();
+    private static final int REQUEST_ADDRESS = 101;
+    private String tvLableString;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_receipt_address);
         ButterKnife.inject(this);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        int who = bundle.getInt("who");
+        if (who == 0) {
+            tvTitle.setText("新增地址");
+        } else if (who == 1) {
+            tvTitle.setText("修改地址");
+        }
+
+        initEvent();
 
         //标签要用到的数组
         addressLabels = new String[]{ "家", "公司", "学校","其他"};
@@ -115,7 +133,57 @@ public class AddAddressActivity extends BaseActivity {
         MyOnFocusChangeListener myOnFocusChangeListener = new MyOnFocusChangeListener();
         etPhone.setOnFocusChangeListener(myOnFocusChangeListener);
 
+
     }
+
+    private void initDB() {
+        DBHelper dbHelper = DBHelper.getInstance();
+        dbHelper.getWritableDatabase();
+        UserBean userBean = new UserBean();
+        userBean.set_id(1);
+        userBean.setName(name);
+        userBean.setPhone(phone);
+
+        try {
+
+            Dao<UserBean, Integer> dao1 = dbHelper.getDao(UserBean.class);
+
+            dao1.create(userBean);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+
+            Dao<AddressBean, Integer> dao2 = dbHelper.getDao(AddressBean.class);
+
+            receiptAddressBean.setUser(userBean);
+            dao2.create(receiptAddressBean);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(this, AddressListActivity.class);
+        startActivity(intent);
+    }
+
+    private void initEvent() {
+        ibBack.setOnClickListener(this);
+        tvReceiptAddress.setOnClickListener(this);
+        ibSelectLabel.setOnClickListener(this);
+        btOk.setOnClickListener(this);
+
+        rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (rbMan.getId() == checkedId) {
+                    sex = rbMan.getText().toString();
+                } else if (rbWomen.getId() == checkedId) {
+                    sex = rbWomen.getText().toString();
+                }
+            }
+        });
+    }
+
+
 
     class MyOnFocusChangeListener implements View.OnFocusChangeListener{
         @Override
@@ -134,21 +202,22 @@ public class AddAddressActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.ib_back, R.id.ib_delete_address, R.id.ib_delete_phone, R.id.tv_receipt_address, R.id.ib_select_label, R.id.bt_ok})
+    @OnClick({R.id.ib_back, R.id.ib_delete_address, R.id.ib_delete_phone, tv_receipt_address, R.id.ib_select_label, R.id.bt_ok})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_back:
                 finish();
                 break;
             case R.id.ib_delete_address:
-                Toast.makeText(this, "  //删除逻辑还没实现", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "删除地址并刷新列表", Toast.LENGTH_SHORT).show();
+                //deleteAddress();
                 finish();
                 break;
             case R.id.ib_delete_phone:
                 //置空文本
                 etPhone.setText("");
                 break;
-            case R.id.tv_receipt_address:
+            case tv_receipt_address:
                 //跳转到选择地址界面
                 reAddress();
                 break;
@@ -158,26 +227,29 @@ public class AddAddressActivity extends BaseActivity {
                 break;
             case R.id.bt_ok:
                 //检查数据是否合法
-                if(checkData()){
-
-finish();
-
+                boolean getData = checkData();
+                if(getData){
+                    initDB();
                 }
                 break;
         }
     }
 
+    private String sex;
+    private String name;
+    private String phone;
+    private String address;
+    private String detailAddress;
+    private String receiptAddress;
 
-
+    //跳转到选择地址的界面
     private void reAddress() {
-      /*  Intent intent = new Intent(this, AddressLocationActivity.class);
-        startActivityForResult(intent,100);*/
-
         Intent intent = new Intent(this, Map2Activity.class);
-        startActivityForResult(intent,100);
+        startActivityForResult(intent,1);
 
     }
 
+    //自定义的标签
     private void showLableDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("请选择标签");
@@ -188,50 +260,66 @@ finish();
                 //which就是选中条目的索引值
                 tvLabel.setText(addressLabels[which]);
                 tvLabel.setBackgroundColor(bgLabels[which]);
+                tvLableString = tvLabel.getText().toString();
 
             }
         });
         builder.show();
     }
 
-
+    //对于输入信息合法性的校验
     private boolean checkData() {
-        String name = etName.getText().toString().trim();
+        name = etName.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "请填写联系人", Toast.LENGTH_SHORT).show();
             return false;
         }
-        String phone = etPhone.getText().toString().trim();
+        receiptAddressBean.setName(name);
+
+        receiptAddressBean.setSex(sex);
+
+        phone = etPhone.getText().toString().trim();
         if (TextUtils.isEmpty(phone)) {
             Toast.makeText(this, "请填写手机号码", Toast.LENGTH_SHORT).show();
             return false;
         }
+
         if (!SMSUtil.isMobileNO(phone)) {
             Toast.makeText(this, "请填写合法的手机号", Toast.LENGTH_SHORT).show();
             return false;
         }
-/*        String receiptAddress = tvReceiptAddress.getText().toString().trim();
+
+        receiptAddressBean.setPhone(phone);
+
+        receiptAddress = tvReceiptAddress.getText().toString().trim();
         if (TextUtils.isEmpty(receiptAddress)) {
             Toast.makeText(this, "请选择收货地址", Toast.LENGTH_SHORT).show();
             return false;
-        }*/
-        String address = etDetailAddress.getText().toString().trim();
+        }
+
+        address = etDetailAddress.getText().toString().trim();
         if (TextUtils.isEmpty(address)) {
             Toast.makeText(this, "请填写详细地址", Toast.LENGTH_SHORT).show();
             return false;
         }
-        int checkedRadioButtonId = rgSex.getCheckedRadioButtonId();
-        if (checkedRadioButtonId != R.id.rb_man && checkedRadioButtonId != R.id.rb_women) {
-            //2个不相等，则说明没有选中任意一个
-            Toast.makeText(this, "请选择性别", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        receiptAddressBean.setDetailAddress(receiptAddress);
+        receiptAddressBean.setDetailAddress(address);
 
-        String tvLableString = tvLabel.getText().toString();
+
         if (TextUtils.isEmpty(tvLableString)) {
             Toast.makeText(this, "请输入标签信息", Toast.LENGTH_SHORT).show();
             return false;
         }
+        receiptAddressBean.setLabel(tvLableString);
+
         return true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        receiptAddress = "北京市昌平区北七家镇宏福科技园";
+        tvReceiptAddress.setText(receiptAddress);
+        receiptAddressBean.setReceiptAddress(receiptAddress);
     }
 }

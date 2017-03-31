@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
@@ -12,8 +14,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.itheima.takeout.MyApplication;
 import com.itheima.takeout.R;
 import com.itheima.takeout.model.net.bean.HomeInfo;
-
-import java.util.HashMap;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by JAVA on 2017/3/27.
@@ -30,6 +31,11 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private Context mContext;
     private HomeInfo mHomeInfo;
+    public LinearLayout mCategory;
+    private LinearLayout mllcatetory_container;
+
+
+
 
 
     /**
@@ -84,7 +90,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             return viewHolder;
         } else if (viewType == Item_Type.RECYCLEVIEW_ITEM_TYPE_3.ordinal()) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.item_title, null);   //轮播图
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_title, null);   //头
             ViewHolderA viewHolder = new ViewHolderA(view);
             return viewHolder;
         }
@@ -102,16 +108,38 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      */
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+
         // TODO: 2017/3/28 待修改
         if (holder instanceof ViewHolderA) {
+            //添加轮播图资源
+            ((ViewHolderA) holder).mSlider.removeAllSliders();
+            for (int i = 0; i < mHomeInfo.head.promotionList.size(); i++) {
+                TextSliderView mTextSliderView = new TextSliderView(MyApplication.getContext());
+                String replace = mHomeInfo.head.promotionList.get(i).pic.replace("172.16.0.116", "10.0.2.2");
+                mTextSliderView.image(replace);
+                ((ViewHolderA) holder).mSlider.addSlider(mTextSliderView);    //添加图
+            }
 
-            //((ViewHolderA) holder).imageViewSlider.setImageResource(R.drawable.a);
-//            ((ViewHolderA) holder).mTextSliderView.image(R.drawable.app_icon);
+            //添加商品分类资源
+            mllcatetory_container.removeAllViews();
+            for (int j = 0; j <mHomeInfo.head.categorieList.size() ; j = j+ 2) {
+
+                mCategory = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.item_home_head_category,mllcatetory_container,false);
+                mllcatetory_container.addView(mCategory);
+
+                String replace = mHomeInfo.head.categorieList.get(j).pic.replace("172.16.0.116", "10.0.2.2");
+                Picasso.with(mContext).load(replace).into((ImageView) mCategory.findViewById(R.id.top_iv));
+                ((TextView) mCategory.findViewById(R.id.top_tv)).setText(mHomeInfo.head.categorieList.get(j).name);
+                replace = mHomeInfo.head.categorieList.get(j+1).pic.replace("172.16.0.116", "10.0.2.2");
+                Picasso.with(mContext).load(replace).into((ImageView) mCategory.findViewById(R.id.bottom_iv));
+                ((TextView) mCategory.findViewById(R.id.bottom_tv)).setText(mHomeInfo.head.categorieList.get(j+1).name);
+
+            }
+
 
         } else if (holder instanceof ViewHolderB) {
 
         } else if (holder instanceof ViewHolderC) {
-            //((ViewHolderC) holder).text.setText(mData.get(position).getText() + "------样式三");
             //((ViewHolderC) holder).text.setText("附近商家");
         }
 
@@ -151,27 +179,14 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     /**
-     * 轮播图
+     * 头
      */
     class ViewHolderA extends RecyclerView.ViewHolder {
-        public SliderLayout mSlider;
-
+        private SliderLayout mSlider;
         public ViewHolderA(View itemView) {
             super(itemView);
             mSlider = (SliderLayout) itemView.findViewById(R.id.slider);
-
-            HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
-            file_maps.put("id1", R.drawable.a);  //假数据
-            file_maps.put("id2", R.drawable.address_add_btn_icon);
-            file_maps.put("id3", R.drawable.app_icon);
-
-            for (String name : file_maps.keySet()) {
-                TextSliderView mTextSliderView = new TextSliderView(MyApplication.getContext());
-                mTextSliderView.image(file_maps.get(name));
-                mSlider.addSlider(mTextSliderView);    //添加图
-            }
-
-
+            mllcatetory_container = (LinearLayout) itemView.findViewById(R.id.catetory_container);
         }
     }
 

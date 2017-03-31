@@ -38,8 +38,8 @@
 
         <!--开发者申请的key-->
         <meta-data
-            android:name="key"
-            android:value="67c9a7f7e65d66edad6c2dfc7a032a06" />
+            android:name="takeout"
+            android:value="780a992595385e447a5428880ec8caeb" />
 
         <activity android:name=".ui.activity.MainActivity">
 
@@ -61,7 +61,6 @@
 
         <activity android:name=".ui.activity.AddAddressActivity"/>
         <activity android:name=".ui.activity.AddressListActivity"/>
-        <activity android:name=".ui.activity.AddressLocationActivity"/>
         <activity android:name=".ui.activity.Map2Activity"/>
         <activity android:name=".ui.activity.SettleCenterActivity"/>
         <activity android:name=".ui.activity.OnlinePayActivity"/>

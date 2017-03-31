@@ -20,7 +20,6 @@ import com.itheima.takeout.dagger.module.fragment.HomeFragmentModule;
 import com.itheima.takeout.model.net.bean.HomeInfo;
 import com.itheima.takeout.presenter.fragment.HomeFragmentPresenter;
 import com.itheima.takeout.ui.activity.Map2Activity;
-import com.itheima.takeout.ui.adapter.Bean;
 import com.itheima.takeout.ui.adapter.RecycleAdapter;
 import com.itheima.takeout.ui.views.RecycleViewDivider;
 
@@ -128,6 +127,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void failed(String msg) {
+
     }
 
     public void success(HomeInfo info) {
@@ -146,21 +146,19 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.home_tv_address)
     public void onClick(View view) {
-        switch (view.getId()){
 
-            case R.id.home_tv_address:
-
-                Intent intent = new Intent(getContext(), Map2Activity.class);
-                startActivity(intent);
-
-                break;
-
-
-
-
-        }
+        Intent intent = new Intent(getContext(), Map2Activity.class);
+        //startActivity(intent);
+        startActivityForResult(intent,1);
 
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1&& resultCode == 4){
+            String title = data.getStringExtra("title");
+            homeTvAddress.setText(title);
+        }
+    }
 }
