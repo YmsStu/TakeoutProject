@@ -30,6 +30,7 @@ import butterknife.OnClick;
 
 public class SettleCenterActivity extends AppCompatActivity {
 
+
     @InjectView(R.id.ib_back)
     ImageButton ibBack;
     @InjectView(R.id.rl_right)
@@ -56,17 +57,16 @@ public class SettleCenterActivity extends AppCompatActivity {
     ImageView ivLogo;
     @InjectView(R.id.tv_seller_name)
     TextView tvSellerName;
+    @InjectView(R.id.goods_recyclerView)
+    RecyclerView mRecyclerView;
     @InjectView(R.id.ll_select_goods)
-    RelativeLayout llSelectGoods;
+    LinearLayout llSelectGoods;
     @InjectView(R.id.tv_send_price)
     TextView tvSendPrice;
     @InjectView(R.id.tv_count_price)
     TextView tvCountPrice;
     @InjectView(R.id.tv_submit)
     TextView tvSubmit;
-    @InjectView(R.id.goods_recyclerView)
-    RecyclerView mRecyclerView;
-
     private ArrayList<GoodsBean> Datas = new ArrayList<>();
     private MyViewHolder holder;
 
@@ -74,11 +74,11 @@ public class SettleCenterActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settle_center);
+//        ButterKnife.inject(this)
         ButterKnife.inject(this);
         init();
 
     }
-
 
     //初始化界面
     private void init() {
