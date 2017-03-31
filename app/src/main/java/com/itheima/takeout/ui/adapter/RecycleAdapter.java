@@ -112,14 +112,16 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // TODO: 2017/3/28 待修改
         if (holder instanceof ViewHolderA) {
             //添加轮播图资源
+            ((ViewHolderA) holder).mSlider.removeAllSliders();
             for (int i = 0; i < mHomeInfo.head.promotionList.size(); i++) {
                 TextSliderView mTextSliderView = new TextSliderView(MyApplication.getContext());
                 String replace = mHomeInfo.head.promotionList.get(i).pic.replace("172.16.0.116", "10.0.2.2");
-                    mTextSliderView.image(replace);
+                mTextSliderView.image(replace);
                 ((ViewHolderA) holder).mSlider.addSlider(mTextSliderView);    //添加图
             }
 
             //添加商品分类资源
+            mllcatetory_container.removeAllViews();
             for (int j = 0; j <mHomeInfo.head.categorieList.size() ; j = j+ 2) {
 
                 mCategory = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.item_home_head_category,mllcatetory_container,false);
