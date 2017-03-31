@@ -132,19 +132,17 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                 }
             });
 
-       /*
-         跳转到订单页面
-         holder.ll_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(),Map2Activity.class);
-
-                    intent.putExtra("addressBean",addressBean);
-
-                    startActivity(intent);
-                    finish();
-                }
-            });*/
+//         //跳转到订单页面
+//         holder.ll_edit.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(getApplicationContext(),SettleCenterActivity.class);
+//
+//
+//                    startActivity(intent);
+//                    finish();
+//                }
+//            });
         }
 
         @Override

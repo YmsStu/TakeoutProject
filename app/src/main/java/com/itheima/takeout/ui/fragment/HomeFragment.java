@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itheima.takeout.MyApplication;
 import com.itheima.takeout.R;
@@ -55,7 +57,10 @@ public class HomeFragment extends BaseFragment {
 
     @Inject
     HomeFragmentPresenter presenter;
+    @InjectView(R.id.srl_home)
+    SwipeRefreshLayout srlHome;
     private HomeInfo mDatainfo;
+    private RecycleAdapter mRecycleAdapter;
 
 
     @Override
@@ -73,16 +78,27 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, null);
         ButterKnife.inject(this, view);
+        srlHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initData();
+                //mRecycleAdapter.notifyDataSetChanged();
+                srlHome.setRefreshing(false);
+            }
+        });
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.getData();
+        initData();
 
     }
 
+    public void initData() {
+        presenter.getData();
+    }
 
     @Override
     public void onResume() {
@@ -127,7 +143,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void failed(String msg) {
-
     }
 
     public void success(HomeInfo info) {
@@ -135,9 +150,10 @@ public class HomeFragment extends BaseFragment {
 
         rvHome.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
         //设置adapter
-        rvHome.setAdapter(new RecycleAdapter(MyApplication.getContext(), mDatainfo));
+        mRecycleAdapter = new RecycleAdapter(MyApplication.getContext(), mDatainfo);
+        rvHome.setAdapter(mRecycleAdapter);
         //设置分割线
-        rvHome.addItemDecoration(new RecycleViewDivider(MyApplication.getContext(), LinearLayoutManager.HORIZONTAL));
+        rvHome.addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL));
         rvHome.addOnScrollListener(listener);
         // 显示滚动条
 
@@ -147,16 +163,16 @@ public class HomeFragment extends BaseFragment {
     @OnClick(R.id.home_tv_address)
     public void onClick(View view) {
 
-        Intent intent = new Intent(getContext(), Map2Activity.class);
+        Intent intent = new Intent(MyApplication.getContext(), Map2Activity.class);
         //startActivity(intent);
-        startActivityForResult(intent,1);
+        startActivityForResult(intent, 1);
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1&& resultCode == 4){
+        if (requestCode == 1 && resultCode == 4) {
             String title = data.getStringExtra("title");
             homeTvAddress.setText(title);
         }

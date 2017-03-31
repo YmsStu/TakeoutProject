@@ -20,6 +20,7 @@
         <TableRow>
 
             <TextView
+                android:id="@+id/tv1_division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -31,6 +32,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv2_division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -48,6 +50,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv3_division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -68,6 +71,7 @@
         <TableRow>
 
             <TextView
+                android:id="@+id/tv4_division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -85,6 +89,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv5_division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -102,6 +107,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv6_division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

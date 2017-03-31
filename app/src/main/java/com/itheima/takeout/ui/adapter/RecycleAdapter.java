@@ -1,6 +1,7 @@
 package com.itheima.takeout.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.itheima.takeout.MyApplication;
 import com.itheima.takeout.R;
 import com.itheima.takeout.model.net.bean.HomeInfo;
+import com.itheima.takeout.ui.activity.SettleCenterActivity;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -35,9 +38,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private LinearLayout mllcatetory_container;
 
 
-
-
-
     /**
      * 点击监听
      *
@@ -45,6 +45,9 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      */
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(mContext, SettleCenterActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
 
     }
 
@@ -59,6 +62,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecycleAdapter(Context context, HomeInfo mHomeInfo) {
         this.mContext = context;
         this.mHomeInfo = mHomeInfo;
+
     }
 
 
@@ -122,25 +126,35 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             //添加商品分类资源
             mllcatetory_container.removeAllViews();
-            for (int j = 0; j <mHomeInfo.head.categorieList.size() ; j = j+ 2) {
+            for (int j = 0; j < mHomeInfo.head.categorieList.size(); j = j + 2) {
 
-                mCategory = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.item_home_head_category,mllcatetory_container,false);
+                mCategory = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.item_home_head_category, mllcatetory_container, false);
                 mllcatetory_container.addView(mCategory);
 
                 String replace = mHomeInfo.head.categorieList.get(j).pic.replace("172.16.0.116", "10.0.2.2");
                 Picasso.with(mContext).load(replace).into((ImageView) mCategory.findViewById(R.id.top_iv));
                 ((TextView) mCategory.findViewById(R.id.top_tv)).setText(mHomeInfo.head.categorieList.get(j).name);
-                replace = mHomeInfo.head.categorieList.get(j+1).pic.replace("172.16.0.116", "10.0.2.2");
+                replace = mHomeInfo.head.categorieList.get(j + 1).pic.replace("172.16.0.116", "10.0.2.2");
                 Picasso.with(mContext).load(replace).into((ImageView) mCategory.findViewById(R.id.bottom_iv));
-                ((TextView) mCategory.findViewById(R.id.bottom_tv)).setText(mHomeInfo.head.categorieList.get(j+1).name);
+                ((TextView) mCategory.findViewById(R.id.bottom_tv)).setText(mHomeInfo.head.categorieList.get(j + 1).name);
 
             }
 
 
         } else if (holder instanceof ViewHolderB) {
+            for (int i = 0; i <mHomeInfo.body.size() ; i++) {
+                if(mHomeInfo.body.get(position-1).type == 1) {
+                    i++;
+                } else {
+                    ((ViewHolderB) holder).text.setText(mHomeInfo.body.get(position-1).seller.name);
+                }
+
+            }
 
         } else if (holder instanceof ViewHolderC) {
-            //((ViewHolderC) holder).text.setText("附近商家");
+/*            for (int i = 0; i < mHomeInfo.body.size(); i++) {
+                ((ViewHolderC) holder).text0.setText("111");
+            }*/
         }
 
     }
@@ -183,6 +197,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      */
     class ViewHolderA extends RecyclerView.ViewHolder {
         private SliderLayout mSlider;
+
         public ViewHolderA(View itemView) {
             super(itemView);
             mSlider = (SliderLayout) itemView.findViewById(R.id.slider);
@@ -192,27 +207,35 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     class ViewHolderB extends RecyclerView.ViewHolder {
-/*        public ImageView imageView1;
-        public ImageView imageView2;
-        public TextView text1;
-        public TextView text2;*/
+
+        public TextView text;
 
         public ViewHolderB(View itemView) {
             super(itemView);
-/*            imageView1 = (ImageView) itemView.findViewById(R.id.top_iv);
-            imageView2 = (ImageView) itemView.findViewById(R.id.bottom_iv);
-            text1 = (TextView) itemView.findViewById(R.id.top_tv);
-            text2 = (TextView) itemView.findViewById(R.id.bottom_tv);*/
+
+            text = (TextView) itemView.findViewById(R.id.tv_title);
         }
+
     }
 
     class ViewHolderC extends RecyclerView.ViewHolder {
 
-        public TextView text;
+        public TextView text0;
+        public TextView text1;
+        public TextView text2;
+        public TextView text3;
+        public TextView text4;
+        public TextView text5;
 
         public ViewHolderC(View itemView) {
             super(itemView);
-
+            text0 = (TextView) itemView.findViewById(R.id.tv1_division);
+            text1 = (TextView) itemView.findViewById(R.id.tv1_division);
+            text2 = (TextView) itemView.findViewById(R.id.tv1_division);
+            text3 = (TextView) itemView.findViewById(R.id.tv1_division);
+            text4 = (TextView) itemView.findViewById(R.id.tv1_division);
+            text5 = (TextView) itemView.findViewById(R.id.tv1_division);
         }
+
     }
 }
