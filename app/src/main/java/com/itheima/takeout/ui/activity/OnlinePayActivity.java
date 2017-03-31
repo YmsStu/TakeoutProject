@@ -94,26 +94,9 @@ public class OnlinePayActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK){
+
             //设置对话框
-            isExit = new AlertDialog.Builder(OnlinePayActivity.this)
-                    .setTitle("系统提示")//设置对话框标题
-                    .setMessage("确认要放弃支付么！")//设置显示的内容
-                    .setCancelable(false)
-                    .setPositiveButton("确定",new DialogInterface.OnClickListener() {//添加确定按钮
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
-                            finish();
-                        }
-
-                    }).setNegativeButton("返回",new DialogInterface.OnClickListener() {//添加返回按钮
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {//响应事件
-
-                        }
-
-                    }).show();
+            getAlerDialog();
 
         }
         return false;
@@ -127,7 +110,7 @@ public class OnlinePayActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_back:
-                isExit.show();
+                getAlerDialog();
                 break;
             case R.id.iv_triangle:
                 if (isClickedrTiangle == false) {
@@ -189,6 +172,30 @@ public class OnlinePayActivity extends AppCompatActivity {
             btConfirmPay.setEnabled(false);
         }
     }
+
+    public void getAlerDialog() {
+        isExit = new AlertDialog.Builder(OnlinePayActivity.this)
+                .setTitle("系统提示")//设置对话框标题
+                .setMessage("确认要放弃支付么！")//设置显示的内容
+                .setCancelable(false)
+                .setPositiveButton("确定",new DialogInterface.OnClickListener() {//添加确定按钮
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
+                        finish();
+                    }
+
+                }).setNegativeButton("返回",new DialogInterface.OnClickListener() {//添加返回按钮
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {//响应事件
+
+                    }
+
+                }).show();
+
+    }
+
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);// 参数依次为总时长,和计时的时间间隔

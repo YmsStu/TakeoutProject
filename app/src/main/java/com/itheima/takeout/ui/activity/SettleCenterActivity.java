@@ -30,6 +30,7 @@ import butterknife.OnClick;
 
 public class SettleCenterActivity extends AppCompatActivity {
 
+
     @InjectView(R.id.ib_back)
     ImageButton ibBack;
     @InjectView(R.id.rl_right)
@@ -56,20 +57,21 @@ public class SettleCenterActivity extends AppCompatActivity {
     ImageView ivLogo;
     @InjectView(R.id.tv_seller_name)
     TextView tvSellerName;
+    @InjectView(R.id.goods_recyclerView)
+    RecyclerView mRecyclerView;
     @InjectView(R.id.ll_select_goods)
-    RelativeLayout llSelectGoods;
+    LinearLayout llSelectGoods;
     @InjectView(R.id.tv_send_price)
     TextView tvSendPrice;
     @InjectView(R.id.tv_count_price)
     TextView tvCountPrice;
     @InjectView(R.id.tv_submit)
     TextView tvSubmit;
-    @InjectView(R.id.goods_recyclerView)
-    RecyclerView mRecyclerView;
-
     private ArrayList<GoodsBean> Datas = new ArrayList<>();
     private MyViewHolder holder;
-
+    private String[] name = {"盖浇饭", "西红柿鸡蛋饭", "蛋炒饭"};
+    private String[] counts = {"x1", "x1", "x1"};
+    private String[] prices = {"￥13.0", "￥12.0", "￥13.0"};
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +98,14 @@ public class SettleCenterActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(new MyAdapter());
 
+        for (int i = 0; i < 3; i++) {
+            GoodsBean goodsBean=new GoodsBean();
+            goodsBean.shopname = name[i];
+            goodsBean.count = counts[i];
+            goodsBean.goodsprice = prices[i];
+            Datas.add(goodsBean);
+        }
+
     }
 
     //初始化商品栏
@@ -109,7 +119,9 @@ public class SettleCenterActivity extends AppCompatActivity {
                 break;
             case R.id.rl_location:
 //                //跳转到收货地址
+                Intent intent1 = new Intent(SettleCenterActivity.this, AddressListActivity.class);
 
+                startActivity(intent1);
                 break;
             case R.id.tv_submit:
                 //跳转到在线支付

@@ -192,7 +192,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:text="￥43.00"
+                    android:text="￥38.0"
                     android:textColor="#e26226"
                     android:textSize="15sp" />
             </RelativeLayout>

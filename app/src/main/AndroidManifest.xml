@@ -63,6 +63,11 @@
         <activity android:name=".ui.activity.AddressListActivity"/>
         <activity android:name=".ui.activity.AddressLocationActivity"/>
         <activity android:name=".ui.activity.Map2Activity"/>
+        <activity android:name=".ui.activity.SettleCenterActivity"/>
+        <activity android:name=".ui.activity.OnlinePayActivity"/>
+
+
+
 
         <!-- 定位需要的服务 使用2.0的定位需要加上这个 -->
         <service android:name="com.amap.api.location.APSService"></service>
