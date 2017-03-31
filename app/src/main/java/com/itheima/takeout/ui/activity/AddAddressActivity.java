@@ -209,7 +209,7 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.ib_delete_address:
-                Toast.makeText(this, "  //删除地址并刷新列表", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "删除地址并刷新列表", Toast.LENGTH_SHORT).show();
                 //deleteAddress();
                 finish();
                 break;
@@ -231,7 +231,6 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
                 if(getData){
                     initDB();
                 }
-                finish();
                 break;
         }
     }
@@ -304,8 +303,8 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
             return false;
         }
         receiptAddressBean.setDetailAddress(receiptAddress);
-
         receiptAddressBean.setDetailAddress(address);
+
 
         if (TextUtils.isEmpty(tvLableString)) {
             Toast.makeText(this, "请输入标签信息", Toast.LENGTH_SHORT).show();
@@ -319,7 +318,7 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onRestart() {
         super.onRestart();
-        receiptAddress = "北京市昌平区七家镇宏福科技园";
+        receiptAddress = "北京市昌平区北七家镇宏福科技园";
         tvReceiptAddress.setText(receiptAddress);
         receiptAddressBean.setReceiptAddress(receiptAddress);
     }

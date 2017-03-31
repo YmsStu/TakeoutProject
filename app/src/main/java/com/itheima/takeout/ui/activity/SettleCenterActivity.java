@@ -69,7 +69,9 @@ public class SettleCenterActivity extends AppCompatActivity {
     TextView tvSubmit;
     private ArrayList<GoodsBean> Datas = new ArrayList<>();
     private MyViewHolder holder;
-
+    private String[] name = {"盖浇饭", "西红柿鸡蛋饭", "蛋炒饭"};
+    private String[] counts = {"x1", "x1", "x1"};
+    private String[] prices = {"￥13.0", "￥12.0", "￥13.0"};
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +98,14 @@ public class SettleCenterActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(new MyAdapter());
 
+        for (int i = 0; i < 3; i++) {
+            GoodsBean goodsBean=new GoodsBean();
+            goodsBean.shopname = name[i];
+            goodsBean.count = counts[i];
+            goodsBean.goodsprice = prices[i];
+            Datas.add(goodsBean);
+        }
+
     }
 
     //初始化商品栏
@@ -109,7 +119,9 @@ public class SettleCenterActivity extends AppCompatActivity {
                 break;
             case R.id.rl_location:
 //                //跳转到收货地址
+                Intent intent1 = new Intent(SettleCenterActivity.this, AddressListActivity.class);
 
+                startActivity(intent1);
                 break;
             case R.id.tv_submit:
                 //跳转到在线支付
